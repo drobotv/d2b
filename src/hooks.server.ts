@@ -8,8 +8,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
   if (!token) {
     event.locals.user = null;
     event.locals.session = null;
-    redirect(302, "/login");
-    // return resolve(event);
+    return resolve(event);
   }
 
   const { session, user } = await auth.validateSessionToken(token);
