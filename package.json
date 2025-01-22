@@ -40,7 +40,7 @@
     "eslint-plugin-svelte": "^2.46.1",
     "formsnap": "^2.0.0",
     "globals": "^15.14.0",
-    "lucide-svelte": "^0.469.0",
+    "lucide-svelte": "^0.473.0",
     "mode-watcher": "^0.5.0",
     "paneforge": "^1.0.0-next.2",
     "prettier": "^3.4.2",
