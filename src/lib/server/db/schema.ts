@@ -1,12 +1,14 @@
+import { createId } from "@paralleldrive/cuid2";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
+const id = text().primaryKey().$defaultFn(createId);
 const createdAt = integer({ mode: "timestamp" })
   .$defaultFn(() => new Date())
   .notNull();
 const updatedAt = integer({ mode: "timestamp" }).$onUpdateFn(() => new Date());
 
 export const userTable = sqliteTable("user", {
-  id: text().primaryKey(),
+  id,
   firstName: text().default("").notNull(),
   lastName: text().default("").notNull(),
   email: text().notNull(),
