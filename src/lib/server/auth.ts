@@ -57,9 +57,7 @@ export async function invalidateSession(sessionId: string) {
   await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
 }
 
-export type SessionValidationResult =
-  | { session: Session; user: User }
-  | { session: null; user: null };
+export type SessionValidationResult = { session: Session; user: User } | { session: null; user: null };
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date): void {
   event.cookies.set("session", token, {
