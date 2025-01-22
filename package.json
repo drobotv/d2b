@@ -29,6 +29,7 @@
     "@sveltejs/kit": "^2.15.1",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tailwindcss/postcss": "^4.0.0-beta.8",
+    "arctic": "^3.2.0",
     "bits-ui": "^1.0.0-next.76",
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.30.1",

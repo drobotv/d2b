@@ -1,18 +1,27 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const user = sqliteTable("user", {
-  id: text("id").primaryKey(),
-  age: integer("age")
+const createdAt = integer({ mode: "timestamp" })
+  .$defaultFn(() => new Date())
+  .notNull();
+const updatedAt = integer({ mode: "timestamp" }).$onUpdateFn(() => new Date());
+
+export const userTable = sqliteTable("user", {
+  id: text().primaryKey(),
+  username: text().notNull(),
+  email: text().notNull(),
+  githubId: text(),
+  hashedPassword: text(),
+  createdAt,
+  updatedAt
 });
 
-export const session = sqliteTable("session", {
-  id: text("id").primaryKey(),
-  userId: text("user_id")
+export const sessionTable = sqliteTable("session", {
+  id: text().primaryKey(),
+  userId: text()
     .notNull()
-    .references(() => user.id),
-  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull()
+    .references(() => userTable.id),
+  expiresAt: integer({ mode: "timestamp" }).notNull()
 });
 
-export type Session = typeof session.$inferSelect;
-
-export type User = typeof user.$inferSelect;
+export type Session = typeof sessionTable.$inferSelect;
+export type User = typeof userTable.$inferSelect;
