@@ -7,7 +7,8 @@ const updatedAt = integer({ mode: "timestamp" }).$onUpdateFn(() => new Date());
 
 export const userTable = sqliteTable("user", {
   id: text().primaryKey(),
-  username: text().notNull(),
+  firstName: text().default("").notNull(),
+  lastName: text().default("").notNull(),
   email: text().notNull(),
   githubId: text(),
   hashedPassword: text(),
