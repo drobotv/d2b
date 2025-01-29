@@ -15,7 +15,8 @@
     "test": "npm run test:e2e",
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "translate": "bunx @inlang/cli machine translate --project ./project.inlang"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.5",
@@ -49,7 +50,7 @@
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.10",
-    "svelte": "^5.19.2",
+    "svelte": "^5.19.5",
     "svelte-check": "^4.1.4",
     "svelte-sonner": "^0.3.28",
     "sveltekit-superforms": "^2.23.1",

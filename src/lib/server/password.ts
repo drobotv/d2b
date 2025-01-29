@@ -6,6 +6,6 @@ export async function hashPassword(password: string): Promise<string> {
   });
 }
 
-export async function verifyPasswordHash(hash: string, password: string): Promise<boolean> {
-  return await Bun.password.verify(hash, password, "argon2id");
+export async function verifyPasswordHash(password: string, hash: string): Promise<boolean> {
+  return await Bun.password.verify(password, hash, "argon2id");
 }

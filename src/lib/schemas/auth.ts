@@ -1,6 +1,12 @@
+import { m } from "$lib/i18n";
 import * as v from "valibot";
 
-export const emailRegisterSchema = v.pipe(
+export const loginSchema = v.object({
+  email: v.pipe(v.string(), v.nonEmpty(), v.email()),
+  password: v.pipe(v.string(), v.nonEmpty(), v.minLength(12), v.maxLength(128))
+});
+
+export const registerSchema = v.pipe(
   v.object({
     email: v.pipe(v.string(), v.nonEmpty(), v.email()),
     password: v.pipe(v.string(), v.nonEmpty(), v.minLength(12), v.maxLength(128)),

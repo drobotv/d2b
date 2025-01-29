@@ -1,4 +1,16 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "hello_world": "Hello, {name} from pl!"
+  "hello_world": "Hello, {name} from pl!",
+  "email": "E-mail",
+  "create_new_account": "Utwórz nowe konto",
+  "password": "Hasło",
+  "confirm_password": "Potwierdź hasło",
+  "register": "Rejestracja",
+  "already_have_an_account": "Masz już konto?",
+  "login": "Zaloguj się",
+  "form_login_desc": "Wprowadź poniżej swój adres e-mail, aby zalogować się na swoje konto",
+  "form_login_with_github": "Zaloguj się za pomocą Github",
+  "dont_have_an_account": "Nie masz konta?",
+  "form_invalid_data": "Nieprawidłowy adres e-mail lub hasło",
+  "password_match_err": "Hasła nie pasują, sprawdź wprowadzone dane"
 }

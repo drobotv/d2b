@@ -6,5 +6,11 @@
   "password": "Password",
   "confirm_password": "Confirm password",
   "register": "Register",
-  "already_have_an_account": "Already have an account?"
+  "already_have_an_account": "Already have an account?",
+  "login": "Login",
+  "form_login_desc": "Enter your email below to login to your account",
+  "form_login_with_github": "Login with Github",
+  "dont_have_an_account": "Don't have an account?",
+  "form_invalid_data": "Invalid email or password",
+  "password_match_err": "Confirm password does not match"
 }
