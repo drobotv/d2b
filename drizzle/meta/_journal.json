@@ -8,6 +8,13 @@
       "when": 1737562333880,
       "tag": "0000_round_tigra",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1738768348534,
+      "tag": "0001_gifted_power_man",
+      "breakpoints": true
     }
   ]
 }

@@ -11,6 +11,7 @@ export const userTable = sqliteTable("user", {
   id,
   firstName: text().default("").notNull(),
   lastName: text().default("").notNull(),
+  username: text().default("").notNull(),
   email: text().notNull(),
   githubId: text(),
   hashedPassword: text(),

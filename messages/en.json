@@ -12,5 +12,14 @@
   "form_login_with_github": "Login with Github",
   "dont_have_an_account": "Don't have an account?",
   "form_invalid_data": "Invalid email or password",
-  "password_match_err": "Confirm password does not match"
+  "password_match_err": "Confirm password does not match",
+  "availability": "Availability",
+  "availability_desc": "Configure time when you are available for bookings.",
+  "bookings": "Bookings",
+  "bookings_desc": "See upcoming and past event.",
+  "event_types": "Event types",
+  "event_types_desc": "Create events people can book on your calendar.",
+  "new_word": "New",
+  "settings": "Settings",
+  "settings_desc": "Update your profile data and preferences."
 }

@@ -18,7 +18,12 @@ const handleAuth: Handle = async ({ event, resolve }) => {
     auth.deleteSessionTokenCookie(event);
   }
 
-  event.locals.user = user;
+  event.locals.user = user && {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    username: user.username,
+    email: user.email
+  };
   event.locals.session = session;
 
   return resolve(event);

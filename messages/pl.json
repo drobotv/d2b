@@ -12,5 +12,6 @@
   "form_login_with_github": "Zaloguj się za pomocą Github",
   "dont_have_an_account": "Nie masz konta?",
   "form_invalid_data": "Nieprawidłowy adres e-mail lub hasło",
-  "password_match_err": "Hasła nie pasują, sprawdź wprowadzone dane"
+  "password_match_err": "Hasła nie pasują, sprawdź wprowadzone dane",
+  "availability": "Dostępność"
 }

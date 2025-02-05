@@ -60,7 +60,7 @@ export async function invalidateSession(sessionId: string) {
 export type SessionValidationResult = { session: Session; user: User } | { session: null; user: null };
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date): void {
-  event.cookies.set("session", token, {
+  event.cookies.set(sessionCookieName, token, {
     httpOnly: true,
     sameSite: "lax",
     expires: expiresAt,
@@ -69,7 +69,7 @@ export function setSessionTokenCookie(event: RequestEvent, token: string, expire
 }
 
 export function deleteSessionTokenCookie(event: RequestEvent): void {
-  event.cookies.set("session", "", {
+  event.cookies.set(sessionCookieName, "", {
     httpOnly: true,
     sameSite: "lax",
     maxAge: 0,
