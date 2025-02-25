@@ -7,7 +7,7 @@
   let { data } = $props();
 </script>
 
-<header class="flex items-center justify-between">
+<header class="flex items-start justify-between">
   <div class="space-y-0.5">
     <h2 class="text-2xl font-bold tracking-tight">{m.event_types()}</h2>
     <p class="text-muted-foreground">{m.event_types_desc()}</p>

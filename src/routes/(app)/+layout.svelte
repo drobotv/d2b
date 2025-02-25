@@ -7,10 +7,10 @@
   let { children, data } = $props();
 </script>
 
-<Sidebar.Provider class="flex h-screen">
+<Sidebar.Provider class="flex h-screen overflow-hidden">
   <AppSidebar user={data.user!} />
   <Sidebar.Inset>
-    <div class="flex flex-1 flex-col gap-4 p-4">
+    <div class="flex flex-1 flex-col gap-4 overflow-auto p-4">
       {@render children?.()}
     </div>
   </Sidebar.Inset>
