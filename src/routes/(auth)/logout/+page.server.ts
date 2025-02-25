@@ -1,4 +1,4 @@
-import { i18n } from "$lib/i18n";
+import { localizeUrl } from "$lib/paraglide/runtime";
 import { deleteSessionTokenCookie, invalidateSession } from "$lib/server/auth";
 import { redirect } from "@sveltejs/kit";
 
@@ -10,5 +10,5 @@ export const load = async (event) => {
     deleteSessionTokenCookie(event);
   }
 
-  redirect(302, i18n.resolveRoute("/"));
+  redirect(302, localizeUrl("/login"));
 };

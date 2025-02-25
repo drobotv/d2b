@@ -1,4 +1,5 @@
-import { i18n, m } from "$lib/i18n";
+import { m } from "$lib/i18n";
+import { localizeUrl } from "$lib/paraglide/runtime";
 import { registerSchema } from "$lib/schemas/auth";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "$lib/server/auth";
 import { db } from "$lib/server/db";
@@ -9,7 +10,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { setError, superValidate } from "sveltekit-superforms";
 
 export const load = async (event) => {
-  if (event.locals.user) redirect(302, i18n.resolveRoute("/events"));
+  if (event.locals.user) redirect(302, localizeUrl("/events"));
   return {
     form: await superValidate(adapter(registerSchema))
   };
@@ -17,7 +18,7 @@ export const load = async (event) => {
 
 export const actions = {
   default: async (event) => {
-    if (event.locals.user) redirect(302, i18n.resolveRoute("/events"));
+    if (event.locals.user) redirect(302, localizeUrl("/events"));
 
     const form = await superValidate(event, adapter(registerSchema));
     if (!form.valid) {
@@ -49,6 +50,6 @@ export const actions = {
     const session = await createSession(token, id);
     setSessionTokenCookie(event, token, session.expiresAt);
 
-    redirect(302, i18n.resolveRoute("/events"));
+    redirect(302, localizeUrl("/events"));
   }
 };

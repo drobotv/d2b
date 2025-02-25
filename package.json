@@ -1,26 +1,10 @@
 {
   "name": "d2b",
-  "private": true,
   "version": "0.0.1",
-  "type": "module",
-  "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "vite preview",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "format": "prettier --write .",
-    "lint": "prettier --check . && eslint .",
-    "test:e2e": "playwright test",
-    "test": "npm run test:e2e",
-    "db:push": "drizzle-kit push",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio",
-    "translate": "bunx @inlang/cli machine translate --project ./project.inlang"
-  },
   "devDependencies": {
     "@eslint/compat": "^1.2.5",
-    "@inlang/paraglide-sveltekit": "^0.15.5",
+    "@inlang/paraglide-js": "^2.0.0-beta.21",
+    "@inlang/paraglide-sveltekit": "^1.0.0-beta.7",
     "@internationalized/date": "^3.7.0",
     "@libsql/client": "^0.14.0",
     "@oslojs/crypto": "^1.0.1",
@@ -31,6 +15,7 @@
     "@sveltejs/kit": "^2.16.1",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tailwindcss/postcss": "^4.0.0",
+    "@tanstack/table-core": "^8.21.2",
     "@types/bun": "^1.1.18",
     "@valibot/i18n": "^1.0.0-beta.2",
     "arctic": "^3.2.1",
@@ -64,5 +49,21 @@
     "vaul-svelte": "^1.0.0-next.3",
     "vite": "^6.0.11"
   },
-  "dependencies": {}
+  "private": true,
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "format": "prettier --write .",
+    "lint": "prettier --check . && eslint .",
+    "test:e2e": "playwright test",
+    "test": "npm run test:e2e",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "translate": "bunx @inlang/cli machine translate --project ./project.inlang"
+  },
+  "type": "module"
 }

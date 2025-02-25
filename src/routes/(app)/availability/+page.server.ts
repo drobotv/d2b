@@ -1,4 +1,3 @@
-import { i18n } from "$lib/i18n";
 import { availabilitySchema } from "$lib/schemas/availability";
 import { adapter } from "$lib/utils/superform";
 import { fail, redirect } from "@sveltejs/kit";

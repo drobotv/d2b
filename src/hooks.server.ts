@@ -1,4 +1,4 @@
-import { i18n } from "$lib/i18n";
+import { serverMiddleware } from "$lib/paraglide/runtime";
 import * as auth from "$lib/server/auth";
 import { redirect, type Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
@@ -29,5 +29,8 @@ const handleAuth: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
-const handleParaglide: Handle = i18n.handle();
+const handleParaglide: Handle = ({ event, resolve }) => {
+  return serverMiddleware(event.request, ({ request }) => resolve({ ...event, request }));
+};
+
 export const handle: Handle = sequence(handleAuth, handleParaglide);

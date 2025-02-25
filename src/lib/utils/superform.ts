@@ -1,4 +1,4 @@
-import { languageTag } from "$lib/paraglide/runtime";
+import { getLocale } from "$lib/paraglide/runtime";
 import { superForm as skSuperform, type FormOptions, type SuperValidated } from "sveltekit-superforms";
 import { valibot } from "sveltekit-superforms/adapters";
 import type { GenericSchema, GenericSchemaAsync } from "valibot";
@@ -17,7 +17,7 @@ export function superForm<
 export function adapter<T extends GenericSchema | GenericSchemaAsync>(schema: T) {
   return valibot(schema, {
     config: {
-      lang: languageTag()
+      lang: getLocale()
     }
   });
 }

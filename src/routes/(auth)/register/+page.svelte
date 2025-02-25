@@ -3,6 +3,7 @@
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input";
   import { m } from "$lib/i18n";
+  import { localizeHref } from "$lib/paraglide/runtime";
   import { registerSchema } from "$lib/schemas/auth";
   import { adapter, superForm } from "$lib/utils/superform";
 
@@ -49,6 +50,6 @@
   <!-- <Form.Errors errors={$errors._errors} /> -->
   <Form.Button class="w-full">{m.register()}</Form.Button>
 </form>
-<Button variant="link" class="flex justify-end" href="/login">
+<Button variant="link" class="flex justify-end" href={localizeHref("/login")}>
   {m.already_have_an_account()}
 </Button>

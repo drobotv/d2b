@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "$lib/components/ui/button/button.svelte";
+  import { localizeHref } from "$lib/paraglide/runtime";
   import { ChevronLeft } from "lucide-svelte";
 
   const { children } = $props();
@@ -18,7 +19,7 @@
         class="pointer-events-none absolute inset-0 h-full w-full object-cover"
       />
       <div class="absolute top-0 left-0 p-4 lg:p-8">
-        <Button variant="link" href="/"><ChevronLeft /></Button>
+        <Button variant="link" href={localizeHref("/")}><ChevronLeft /></Button>
       </div>
     </div>
     <div class="lg:p-8">

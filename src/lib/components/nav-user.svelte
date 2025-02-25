@@ -35,11 +35,11 @@
             {...props}
           >
             <Avatar.Root class="h-8 w-8 rounded-lg">
-              <Avatar.Image src="https://avatars.githubusercontent.com/u/109414395?v=4" alt={user.username} />
+              <Avatar.Image src="https://avatars.githubusercontent.com/u/109414395?v=4" alt={user?.username} />
               <Avatar.Fallback class="rounded-lg">CN</Avatar.Fallback>
             </Avatar.Root>
             <div class="grid flex-1 text-left text-sm leading-tight">
-              <span class="truncate font-semibold">{user.username}</span>
+              <span class="truncate font-semibold">{user?.username}</span>
               <span class="truncate text-xs">{user.email}</span>
             </div>
             <ChevronsUpDown class="ml-auto size-4" />
