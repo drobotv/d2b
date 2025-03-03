@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Alert, AlertDescription } from "$lib/components/ui/alert";
   import { Button } from "$lib/components/ui/button";
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input";
@@ -20,6 +21,20 @@
   <h1 class="text-2xl font-semibold tracking-tight">{m.create_new_account()}</h1>
 </div>
 <form method="POST" use:enhance class="w-full space-y-2">
+  <!-- {#if data.error}
+    <Alert variant="destructive" class="mb-4">
+      <AlertDescription>{data.error}</AlertDescription>
+    </Alert>
+  {/if} -->
+  <Form.Field {form} name="username">
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>{m.username()}</Form.Label>
+        <Input type="text" {...props} bind:value={$formData.username} />
+      {/snippet}
+    </Form.Control>
+    <Form.FieldErrors />
+  </Form.Field>
   <Form.Field {form} name="email">
     <Form.Control>
       {#snippet children({ props })}

@@ -2,6 +2,7 @@
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "hello_world": "Hello, {name} from en!",
   "email": "Email",
+  "username": "Username",
   "create_new_account": "Create a new account",
   "password": "Password",
   "confirm_password": "Confirm password",
@@ -21,5 +22,8 @@
   "event_types_desc": "Create events people can book on your calendar.",
   "new_word": "New",
   "settings": "Settings",
-  "settings_desc": "Update your profile data and preferences."
+  "settings_desc": "Update your profile data and preferences.",
+  "email_already_registered": "Email already registered",
+  "username_already_taken": "Username already taken",
+  "registration_failed": "Registration failed, please try again later"
 }

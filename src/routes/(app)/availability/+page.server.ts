@@ -1,37 +1,61 @@
 import { availabilitySchema } from "$lib/schemas/availability";
+import { db } from "$lib/server/db";
+import { availabilityScheduleTable } from "$lib/server/db/schema";
 import { adapter } from "$lib/utils/superform";
-import { fail, redirect } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
+import { eq } from "drizzle-orm";
 import { superValidate } from "sveltekit-superforms";
+import * as v from "valibot";
 
-const defaultAvailability = {
-  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  availability: {
-    "0": { start: 540, end: 1020, enabled: true },
-    "1": { start: 540, end: 1020, enabled: true },
-    "2": { start: 540, end: 1020, enabled: true },
-    "3": { start: 540, end: 1020, enabled: true },
-    "4": { start: 540, end: 1020, enabled: true },
-    "5": { start: 540, end: 1020, enabled: false },
-    "6": { start: 540, end: 1020, enabled: false }
+type AvailabilityFormData = v.InferOutput<typeof availabilitySchema>;
+
+export const load = async ({ locals }) => {
+  const existingSchedule = await db
+    .select({
+      timeZone: availabilityScheduleTable.timeZone,
+      weeklySchedule: availabilityScheduleTable.weeklySchedule
+    })
+    .from(availabilityScheduleTable)
+    .where(eq(availabilityScheduleTable.userId, locals.user!.id))
+    .get();
+
+  if (existingSchedule) {
+    return { form: await superValidate(existingSchedule as AvailabilityFormData, adapter(availabilitySchema)) };
   }
-};
 
-export const load = async () => {
-  const form = await superValidate(defaultAvailability, adapter(availabilitySchema));
-  return { form };
+  return { form: await superValidate(adapter(availabilitySchema)) };
 };
 
 export const actions = {
-  default: async (event) => {
-    const form = await superValidate(event, adapter(availabilitySchema));
-
-    console.log(form.data.availability);
-    console.log(form.data.timeZone);
+  default: async ({ locals, request }) => {
+    const form = await superValidate(request, adapter(availabilitySchema));
 
     if (!form.valid) {
       return fail(400, { form });
     }
 
-    return { form };
+    try {
+      const result = await db
+        .update(availabilityScheduleTable)
+        .set({
+          timeZone: form.data.timeZone,
+          weeklySchedule: form.data.weeklySchedule
+        })
+        .where(eq(availabilityScheduleTable.userId, locals.user!.id))
+        .returning({ id: availabilityScheduleTable.id })
+        .get();
+
+      if (!result) {
+        await db.insert(availabilityScheduleTable).values({
+          userId: locals.user!.id,
+          timeZone: form.data.timeZone,
+          weeklySchedule: form.data.weeklySchedule
+        });
+      }
+
+      return { form };
+    } catch (error) {
+      return fail(500, { form });
+    }
   }
 };

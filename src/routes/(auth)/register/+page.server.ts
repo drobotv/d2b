@@ -7,12 +7,14 @@ import { userTable } from "$lib/server/db/schema";
 import { hashPassword } from "$lib/server/password";
 import { adapter } from "$lib/utils/superform";
 import { fail, redirect } from "@sveltejs/kit";
+import { eq } from "drizzle-orm";
 import { setError, superValidate } from "sveltekit-superforms";
 
 export const load = async (event) => {
   if (event.locals.user) redirect(302, localizeUrl("/events"));
   return {
-    form: await superValidate(adapter(registerSchema))
+    form: await superValidate(adapter(registerSchema)),
+    error: null
   };
 };
 
@@ -27,29 +29,36 @@ export const actions = {
       });
     }
 
-    // TODO: return toast notification
-    // const [existingUser] = await db
-    //   .select({ id: userTable.id })
-    //   .from(userTable)
-    //   .where(eq(userTable.email, form.data.email));
-    // if (existingUser.id) {
-    //   return setError(form, 'email', "User already registered, try loggin");
-    // }
-
     const hashedPassword = await hashPassword(form.data.password);
-    const { id } = await db
-      .insert(userTable)
-      .values({
-        email: form.data.email,
-        hashedPassword
-      })
-      .returning({ id: userTable.id })
-      .get();
+    try {
+      const { id } = await db
+        .insert(userTable)
+        .values({
+          username: form.data.username,
+          email: form.data.email,
+          hashedPassword
+        })
+        .returning({ id: userTable.id })
+        .get();
 
-    const token = generateSessionToken();
-    const session = await createSession(token, id);
-    setSessionTokenCookie(event, token, session.expiresAt);
+      const token = generateSessionToken();
+      const session = await createSession(token, id);
+      setSessionTokenCookie(event, token, session.expiresAt);
 
-    redirect(302, localizeUrl("/events"));
+      redirect(302, localizeUrl("/events"));
+    } catch (error) {
+      const errorMessage = String(error);
+
+      if (errorMessage.includes("UNIQUE constraint failed: user.email")) {
+        return setError(form, "email", m.email_already_registered());
+      } else if (errorMessage.includes("UNIQUE constraint failed: user.username")) {
+        return setError(form, "username", m.username_already_taken());
+      } else {
+        return fail(400, {
+          form,
+          error: m.registration_failed()
+        });
+      }
+    }
   }
 };
