@@ -73,6 +73,7 @@ export const bookingTable = sqliteTable("booking", {
     .references(() => userTable.id),
   guestEmail: text().notNull(),
   guestName: text().notNull(),
+  bufferTime: integer().default(0).notNull(),
   startTime: integer({ mode: "timestamp" }).notNull(),
   endTime: integer({ mode: "timestamp" }).notNull(),
   status: text().default("pending").notNull(), // pending, confirmed, cancelled, completed
