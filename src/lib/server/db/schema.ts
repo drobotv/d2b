@@ -1,5 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text, unique, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 const id = text().primaryKey().$defaultFn(createId);
 const createdAt = integer({ mode: "timestamp" })
@@ -40,22 +40,28 @@ export const availabilityScheduleTable = sqliteTable("availability_schedule", {
   updatedAt
 });
 
-export const eventsTable = sqliteTable("events", {
-  id,
-  userId: text()
-    .notNull()
-    .references(() => userTable.id),
-  slug: text().notNull(),
-  title: text().notNull(),
-  description: text(),
-  location: text(),
-  duration: integer().notNull(), // in minutes
-  bufferTime: integer().default(0).notNull(), // in minutes
-  color: text().default("#000000").notNull(),
-  isActive: integer().default(1).notNull(), // 0 or 1
-  createdAt,
-  updatedAt
-});
+export const eventsTable = sqliteTable(
+  "events",
+  {
+    id,
+    userId: text()
+      .notNull()
+      .references(() => userTable.id),
+    userName: text()
+      .notNull()
+      .references(() => userTable.username),
+    type: text().notNull(),
+    title: text().notNull(),
+    description: text(),
+    duration: integer().notNull(),
+    bufferTime: integer().default(0).notNull(),
+    requiresConfirmation: integer({ mode: "boolean" }).default(true).notNull(),
+    isActive: integer({ mode: "boolean" }).default(true).notNull(),
+    createdAt,
+    updatedAt
+  },
+  (table) => [unique("event_slug").on(table.type, table.userId)]
+);
 
 export const bookingTable = sqliteTable("booking", {
   id,

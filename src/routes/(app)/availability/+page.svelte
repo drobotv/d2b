@@ -4,6 +4,7 @@
   import * as Form from "$lib/components/ui/form";
   import * as Select from "$lib/components/ui/select";
   import { Switch } from "$lib/components/ui/switch";
+  import Toggle from "$lib/components/ui/toggle/toggle.svelte";
   import { m } from "$lib/i18n";
   import { availabilitySchema } from "$lib/schemas/availability";
   import { adapter, superForm } from "$lib/utils/superform";
@@ -11,8 +12,6 @@
   import { toast } from "svelte-sonner";
 
   let { data } = $props();
-
-  console.log("Initial data from server:", data.form.data);
 
   const form = superForm(data.form, {
     dataType: "json",
@@ -102,16 +101,14 @@
             {#snippet children()}
               <Card.Root>
                 <Card.Header>
-                  <Card.Title>Weekly Hours</Card.Title>
-                  <Card.Description
-                    >Set your weekly working hours. You can override these for specific dates later.</Card.Description
-                  >
+                  <Card.Title>{m.weekly_hours()}</Card.Title>
+                  <Card.Description>{m.weekly_hours_desc()}</Card.Description>
                 </Card.Header>
                 <Card.Content class="space-y-4">
                   {#each weekDays as day}
                     <div class="group relative flex flex-row items-center justify-between p-2">
                       <label class="flex cursor-pointer items-center gap-2">
-                        <Switch bind:checked={$formData.weeklySchedule[day.id].enabled} class="scale-75" />
+                        <Switch bind:checked={$formData.weeklySchedule[day.id].enabled} />
                         <span class="text-sm">{day.name}</span>
                       </label>
 
@@ -170,7 +167,7 @@
                           onclick={() => copySchedule(day.id)}
                         >
                           <Copy class="h-4 w-4" />
-                          <span class="sr-only">Copy this schedule to other days</span>
+                          <span class="sr-only">{m.copy_schedule()}</span>
                         </Button>
                       </div>
                     </div>
@@ -189,8 +186,8 @@
             {#snippet children()}
               <Card.Root>
                 <Card.Header>
-                  <Card.Title>Time Zone</Card.Title>
-                  <Card.Description>Select your timezone to ensure accurate scheduling</Card.Description>
+                  <Card.Title>{m.time_zone()}</Card.Title>
+                  <Card.Description>{m.time_zone_desc()}</Card.Description>
                 </Card.Header>
                 <Card.Content>
                   <Select.Root
