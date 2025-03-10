@@ -38,20 +38,19 @@ export async function load({ params }) {
       end: bookingTable.endTime
     })
     .from(bookingTable)
-    .where(and(eq(bookingTable.eventTypeId, event.id), gte(bookingTable.startTime, sql`${todayTimestamp}`)));
-
-  // Convert timestamp to Date objects for the time slot generator
-  const bookingsWithDates = existingBookings.map((booking) => ({
-    start: new Date(Number(booking.start) * 1000),
-    end: new Date(Number(booking.end) * 1000)
-  }));
+    .where(and(gte(bookingTable.startTime, sql`${todayTimestamp}`)));
 
   // Generate time slots for the next 30 days
   const startDate = new Date();
   const endDate = new Date();
   endDate.setDate(endDate.getDate() + 30);
 
-  const timeSlots = generateTimeSlotsForDateRange(startDate, endDate, event, availability, bookingsWithDates);
+  const timeSlots = generateTimeSlotsForDateRange(startDate, endDate, event, availability, existingBookings);
+
+  console.log("timeSlots", timeSlots["2025-03-11"]);
+  console.log("existingBookings", existingBookings);
+  console.log("availability", availability);
+  console.log("event", event);
 
   // Create booking form
   const form = await superValidate(adapter(bookingSchema));

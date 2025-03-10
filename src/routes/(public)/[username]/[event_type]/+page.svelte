@@ -281,9 +281,9 @@
               </div>
 
               {#if data.event.description}
-                <div class="flex flex-1 flex-col border-t pt-4">
+                <div class="flex max-h-[250px] flex-col border-t pt-4">
                   <h3 class="mb-2 text-sm font-medium">About this event</h3>
-                  <div class="text-muted-foreground flex-1 overflow-y-auto text-sm whitespace-pre-line">
+                  <div class="text-muted-foreground h-full overflow-y-auto text-sm whitespace-pre-line">
                     {data.event.description}
                   </div>
                 </div>
@@ -331,6 +331,7 @@
                     {selectedDate === date ? 'bg-primary text-primary-foreground' : ''}
                     {hasSlots && isCurrentMonth && !isDateInPast(date) ? 'font-medium' : ''}
                     {isDateInPast(date) && isCurrentMonth ? 'text-muted-foreground opacity-50' : ''}
+                    {!hasSlots && isCurrentMonth && !isDateInPast(date) ? 'text-muted-foreground opacity-50' : ''}
                     {isToday(date) && isCurrentMonth && selectedDate !== date ? 'bg-muted' : ''}
                     {hasSlots && isCurrentMonth && !isDateInPast(date) && selectedDate !== date ? 'hover:bg-muted' : ''}
                     {!hasSlots || isDateInPast(date) || !isCurrentMonth ? 'cursor-not-allowed' : 'cursor-pointer'}"
@@ -347,7 +348,7 @@
           </div>
 
           <!-- Time Slots Column -->
-          <div class="border-t p-6 md:border-t-0">
+          <div class="min-h-[450px] border-t p-6 md:border-t-0">
             <div class="mb-4">
               <h3 class="text-lg font-medium">
                 {selectedDate ? formatDate(selectedDate) : "Select a date"}
@@ -359,33 +360,35 @@
               </p>
             </div>
 
-            {#if timeSlotsForSelectedDate.length > 0}
-              <div class="grid max-h-[350px] grid-cols-1 gap-2 overflow-y-auto pr-2">
-                {#each timeSlotsForSelectedDate as slot}
-                  <Button
-                    variant={selectedTime === slot.start.toISOString() ? "default" : "outline"}
-                    class="h-auto justify-start px-4 py-3"
-                    onclick={() => selectTimeSlot(slot)}
-                  >
-                    <div class="text-left">
-                      <p class="font-medium">
-                        {formatTimeSlot(slot.start, data.availability.timeZone)} -
-                        {formatTimeSlot(slot.end, data.availability.timeZone)}
-                      </p>
-                    </div>
-                  </Button>
-                {/each}
-              </div>
-            {:else if selectedDate}
-              <div class="text-muted-foreground py-8 text-center">
-                <p>No available time slots for this date.</p>
-                <p class="mt-2 text-sm">Please select another date.</p>
-              </div>
-            {:else}
-              <div class="text-muted-foreground py-8 text-center">
-                <p>Please select a date to view available time slots.</p>
-              </div>
-            {/if}
+            <div class="flex flex-col">
+              {#if timeSlotsForSelectedDate.length > 0}
+                <div class="grid max-h-[320px] grid-cols-1 gap-2 overflow-y-auto pr-2">
+                  {#each timeSlotsForSelectedDate as slot}
+                    <Button
+                      variant={selectedTime === slot.start.toISOString() ? "default" : "outline"}
+                      class="h-12 justify-start px-4 py-3"
+                      onclick={() => selectTimeSlot(slot)}
+                    >
+                      <div class="text-left">
+                        <p class="font-medium">
+                          {formatTimeSlot(slot.start, data.availability.timeZone)} -
+                          {formatTimeSlot(slot.end, data.availability.timeZone)}
+                        </p>
+                      </div>
+                    </Button>
+                  {/each}
+                </div>
+              {:else if selectedDate}
+                <div class="text-muted-foreground py-8 text-center">
+                  <p>No available time slots for this date.</p>
+                  <p class="mt-2 text-sm">Please select another date.</p>
+                </div>
+              {:else}
+                <div class="text-muted-foreground py-8 text-center">
+                  <p>Please select a date to view available time slots.</p>
+                </div>
+              {/if}
+            </div>
           </div>
         </div>
       </Card.Root>
