@@ -16,7 +16,7 @@
     resetForm: false,
     onUpdated: ({ form }) => {
       if (form.valid) {
-        toast.success("Personal information updated successfully");
+        toast.success(m.personal_info_updated());
       }
     }
   });
@@ -26,7 +26,7 @@
     resetForm: true,
     onUpdated: ({ form }) => {
       if (form.valid) {
-        toast.success("Password changed successfully");
+        toast.success(m.password_changed());
       }
     }
   });
@@ -59,8 +59,8 @@
     <div class="col-span-12 space-y-8 lg:col-span-9">
       <Card.Root>
         <Card.Header>
-          <Card.Title>Profile Information</Card.Title>
-          <Card.Description>Update your personal information</Card.Description>
+          <Card.Title>{m.profile_information()}</Card.Title>
+          <Card.Description>{m.update_personal_info()}</Card.Description>
         </Card.Header>
         <Card.Content>
           <form method="POST" action="?/updatePersonalInfo" use:enhancePersonalInfo class="space-y-6">
@@ -68,7 +68,7 @@
               <Form.Field form={personalInfoForm} name="firstName">
                 <Form.Control>
                   {#snippet children({ props })}
-                    <Form.Label>First Name</Form.Label>
+                    <Form.Label>{m.first_name()}</Form.Label>
                     <Input type="text" {...props} bind:value={$personalInfoData.firstName} />
                   {/snippet}
                 </Form.Control>
@@ -78,7 +78,7 @@
               <Form.Field form={personalInfoForm} name="lastName">
                 <Form.Control>
                   {#snippet children({ props })}
-                    <Form.Label>Last Name</Form.Label>
+                    <Form.Label>{m.last_name()}</Form.Label>
                     <Input type="text" {...props} bind:value={$personalInfoData.lastName} />
                   {/snippet}
                 </Form.Control>
@@ -89,22 +89,17 @@
             <Form.Field form={personalInfoForm} name="bio">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>Bio</Form.Label>
-                  <Textarea
-                    {...props}
-                    bind:value={$personalInfoData.bio}
-                    placeholder="Tell us about yourself"
-                    rows={5}
-                  />
+                  <Form.Label>{m.bio()}</Form.Label>
+                  <Textarea {...props} bind:value={$personalInfoData.bio} placeholder={m.bio_placeholder()} rows={5} />
                 {/snippet}
               </Form.Control>
               <Form.Description>
-                A brief description about yourself that will be displayed on your profile.
+                {m.bio_description()}
               </Form.Description>
               <Form.FieldErrors />
             </Form.Field>
             <div class="flex justify-end">
-              <Form.Button>Save Changes</Form.Button>
+              <Form.Button>{m.save_changes()}</Form.Button>
             </div>
           </form>
         </Card.Content>
@@ -113,15 +108,15 @@
       <!-- Password Change -->
       <Card.Root>
         <Card.Header>
-          <Card.Title>Security</Card.Title>
-          <Card.Description>Update your password</Card.Description>
+          <Card.Title>{m.security()}</Card.Title>
+          <Card.Description>{m.update_password()}</Card.Description>
         </Card.Header>
         <Card.Content>
           <form method="POST" action="?/changePassword" use:enhancePasswordChange class="space-y-6">
             <Form.Field form={passwordChangeForm} name="currentPassword">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>Current Password</Form.Label>
+                  <Form.Label>{m.current_password()}</Form.Label>
                   <Input type="password" {...props} bind:value={$passwordData.currentPassword} />
                 {/snippet}
               </Form.Control>
@@ -131,7 +126,7 @@
             <Form.Field form={passwordChangeForm} name="newPassword">
               <Form.Control>
                 {#snippet children({ props })}
-                  <Form.Label>New Password</Form.Label>
+                  <Form.Label>{m.new_password()}</Form.Label>
                   <Input type="password" {...props} bind:value={$passwordData.newPassword} />
                 {/snippet}
               </Form.Control>
@@ -139,7 +134,7 @@
             </Form.Field>
 
             <div class="flex justify-end">
-              <Form.Button>Change Password</Form.Button>
+              <Form.Button>{m.change_password()}</Form.Button>
             </div>
           </form>
         </Card.Content>

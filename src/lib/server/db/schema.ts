@@ -28,7 +28,7 @@ export const sessionTable = sqliteTable("session", {
   expiresAt: integer({ mode: "timestamp" }).notNull()
 });
 
-export const availabilityScheduleTable = sqliteTable("availability_schedule", {
+export const availabilityTable = sqliteTable("availability", {
   id,
   userId: text()
     .notNull()
@@ -68,6 +68,7 @@ export const bookingTable = sqliteTable("booking", {
   eventTypeId: text()
     .notNull()
     .references(() => eventsTable.id),
+  eventName: text().notNull(),
   userId: text()
     .notNull()
     .references(() => userTable.id),
@@ -84,6 +85,6 @@ export const bookingTable = sqliteTable("booking", {
 
 export type Session = typeof sessionTable.$inferSelect;
 export type User = typeof userTable.$inferSelect;
-export type AvailabilitySchedule = typeof availabilityScheduleTable.$inferSelect;
+export type Availability = typeof availabilityTable.$inferSelect;
 export type Event = typeof eventsTable.$inferSelect;
 export type Booking = typeof bookingTable.$inferSelect;

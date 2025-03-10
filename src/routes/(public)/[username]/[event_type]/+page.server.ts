@@ -1,10 +1,10 @@
 import { bookingSchema } from "$lib/schemas/booking";
 import { db } from "$lib/server/db";
-import { availabilityScheduleTable, bookingTable, eventsTable } from "$lib/server/db/schema";
+import { availabilityTable, bookingTable, eventsTable } from "$lib/server/db/schema";
 import { adapter } from "$lib/utils/superform";
 import { generateTimeSlotsForDateRange } from "$lib/utils/timeSlots";
 import { error, fail } from "@sveltejs/kit";
-import { and, eq, gte, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, sql } from "drizzle-orm";
 import { superValidate } from "sveltekit-superforms";
 
 export async function load({ params }) {
@@ -21,10 +21,7 @@ export async function load({ params }) {
   }
 
   // Get user's availability
-  const [availability] = await db
-    .select()
-    .from(availabilityScheduleTable)
-    .where(eq(availabilityScheduleTable.userId, event.userId));
+  const [availability] = await db.select().from(availabilityTable).where(eq(availabilityTable.userId, event.userId));
 
   if (!availability) {
     return error(404, { message: "User availability not found" });
@@ -99,6 +96,7 @@ export const actions = {
         .insert(bookingTable)
         .values({
           eventTypeId: event.id,
+          eventName: event.title,
           userId: event.userId,
           guestEmail: form.data.guestEmail,
           guestName: form.data.guestName,

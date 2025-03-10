@@ -1,6 +1,6 @@
 import { availabilitySchema } from "$lib/schemas/availability";
 import { db } from "$lib/server/db";
-import { availabilityScheduleTable } from "$lib/server/db/schema";
+import { availabilityTable } from "$lib/server/db/schema";
 import { adapter } from "$lib/utils/superform";
 import { fail } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
@@ -12,11 +12,11 @@ type AvailabilityFormData = v.InferOutput<typeof availabilitySchema>;
 export const load = async ({ locals }) => {
   const existingSchedule = await db
     .select({
-      timeZone: availabilityScheduleTable.timeZone,
-      weeklySchedule: availabilityScheduleTable.weeklySchedule
+      timeZone: availabilityTable.timeZone,
+      weeklySchedule: availabilityTable.weeklySchedule
     })
-    .from(availabilityScheduleTable)
-    .where(eq(availabilityScheduleTable.userId, locals.user!.id))
+    .from(availabilityTable)
+    .where(eq(availabilityTable.userId, locals.user!.id))
     .get();
 
   if (existingSchedule) {
@@ -36,17 +36,17 @@ export const actions = {
 
     try {
       const result = await db
-        .update(availabilityScheduleTable)
+        .update(availabilityTable)
         .set({
           timeZone: form.data.timeZone,
           weeklySchedule: form.data.weeklySchedule
         })
-        .where(eq(availabilityScheduleTable.userId, locals.user!.id))
-        .returning({ id: availabilityScheduleTable.id })
+        .where(eq(availabilityTable.userId, locals.user!.id))
+        .returning({ id: availabilityTable.id })
         .get();
 
       if (!result) {
-        await db.insert(availabilityScheduleTable).values({
+        await db.insert(availabilityTable).values({
           userId: locals.user!.id,
           timeZone: form.data.timeZone,
           weeklySchedule: form.data.weeklySchedule

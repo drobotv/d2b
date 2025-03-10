@@ -1,4 +1,4 @@
-import type { AvailabilitySchedule, Event } from "$lib/server/db/schema";
+import type { Availability, Event } from "$lib/server/db/schema";
 
 export type TimeSlot = {
   start: Date;
@@ -19,7 +19,7 @@ export type WeeklySchedule = {
 export function generateTimeSlotsForDate(
   date: Date,
   event: Event,
-  availability: AvailabilitySchedule,
+  availability: Availability,
   existingBookings: { start: Date; end: Date }[] = []
 ): TimeSlot[] {
   // Parse weekly schedule from JSON string if needed
@@ -153,7 +153,7 @@ export function generateTimeSlotsForDateRange(
   startDate: Date,
   endDate: Date,
   event: Event,
-  availability: AvailabilitySchedule,
+  availability: Availability,
   existingBookings: { start: Date; end: Date }[] = []
 ): { [date: string]: TimeSlot[] } {
   const result: { [date: string]: TimeSlot[] } = {};

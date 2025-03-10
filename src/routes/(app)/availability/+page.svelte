@@ -27,16 +27,14 @@
 
   const { form: formData, enhance, tainted, submitting, reset } = form;
 
-  console.log("Initial form data:", $formData);
-
   const weekDays = [
-    { id: 0, name: "Monday" },
-    { id: 1, name: "Tuesday" },
-    { id: 2, name: "Wednesday" },
-    { id: 3, name: "Thursday" },
-    { id: 4, name: "Friday" },
-    { id: 5, name: "Saturday" },
-    { id: 6, name: "Sunday" }
+    { id: 0, name: m.monday() },
+    { id: 1, name: m.tuesday() },
+    { id: 2, name: m.wednesday() },
+    { id: 3, name: m.thursday() },
+    { id: 4, name: m.friday() },
+    { id: 5, name: m.saturday() },
+    { id: 6, name: m.sunday() }
   ] as const;
 
   const timeOptions = Array.from({ length: 96 }, (_, i) => {
@@ -70,11 +68,10 @@
         };
       }
     });
-    toast.info("Schedule copied to other days");
+    toast.info(m.schedule_copied());
   }
 
   if (!$formData.timeZone && !data.form.data.timeZone) {
-    console.log("Setting default timezone because none was provided");
     $formData.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   }
 </script>
