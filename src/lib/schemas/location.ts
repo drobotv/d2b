@@ -10,7 +10,8 @@ export const locationSchema = v.object({
   postalCode: v.pipe(v.string(), v.nonEmpty("Postal code is required")),
   boundingBox: v.array(v.string()),
   lat: v.number(),
-  lng: v.number()
+  lng: v.number(),
+  description: v.optional(v.pipe(v.string(), v.maxLength(200, "Description must be 200 characters or less")))
 });
 
 export type LocationFormData = v.InferOutput<typeof locationSchema>;

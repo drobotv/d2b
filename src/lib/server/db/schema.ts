@@ -99,6 +99,7 @@ export const locationTable = sqliteTable("location", {
   boundingBox: text({ mode: "json" }).notNull(),
   lat: real().notNull(),
   lng: real().notNull(),
+  description: text(),
   createdAt,
   updatedAt
 });

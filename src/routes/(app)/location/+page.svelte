@@ -3,6 +3,7 @@
   import * as Card from "$lib/components/ui/card";
   import * as Form from "$lib/components/ui/form";
   import { Input } from "$lib/components/ui/input";
+  import { Textarea } from "$lib/components/ui/textarea";
   import { m } from "$lib/i18n";
   import { getLocale } from "$lib/paraglide/runtime";
   import { locationSchema } from "$lib/schemas/location";
@@ -139,6 +140,27 @@
             {#snippet children({ props })}
               <Form.Label>{m.name()}</Form.Label>
               <Input {...props} placeholder="Business or location name" bind:value={$formData.name} />
+            {/snippet}
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+
+        <Form.Field {form} name="description">
+          <Form.Control>
+            {#snippet children({ props })}
+              <Form.Label>{m.description()}</Form.Label>
+              <Textarea
+                {...props}
+                placeholder="Enter a description (optional, max 200 characters)"
+                bind:value={$formData.description}
+                maxlength={200}
+                rows={3}
+              />
+              {#if $formData.description}
+                <div class="text-muted-foreground mt-1 text-right text-xs">
+                  {$formData.description.length}/200
+                </div>
+              {/if}
             {/snippet}
           </Form.Control>
           <Form.FieldErrors />

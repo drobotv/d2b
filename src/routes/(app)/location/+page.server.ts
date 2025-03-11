@@ -24,7 +24,8 @@ export const load = async ({ locals }) => {
       postalCode: location.postalCode,
       boundingBox: JSON.parse(location.boundingBox as string),
       lat: location.lat,
-      lng: location.lng
+      lng: location.lng,
+      description: location.description || undefined
     };
     form = await superValidate(formData, adapter(locationSchema));
   } else {
@@ -62,6 +63,7 @@ export const actions = {
           boundingBox: JSON.stringify(form.data.boundingBox),
           lat: form.data.lat,
           lng: form.data.lng,
+          description: form.data.description,
           updatedAt: new Date()
         })
         .where(and(eq(locationTable.id, existingLocation.id), eq(locationTable.userId, locals.user!.id)));
@@ -78,6 +80,7 @@ export const actions = {
         boundingBox: JSON.stringify(form.data.boundingBox),
         lat: form.data.lat,
         lng: form.data.lng,
+        description: form.data.description,
         createdAt: new Date(),
         updatedAt: new Date()
       });
