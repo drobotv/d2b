@@ -1,5 +1,6 @@
 <script lang="ts">
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
+  import { m } from "$lib/i18n";
   import { localizeHref } from "$lib/paraglide/runtime";
   import { Settings } from "lucide-svelte";
 
@@ -21,7 +22,7 @@
       {#snippet child({ props })}
         <a href={localizeHref("/settings")} {...props}>
           <Settings />
-          <span>Settings</span>
+          <span>{m.settings()}</span>
         </a>
       {/snippet}
     </Sidebar.MenuButton>

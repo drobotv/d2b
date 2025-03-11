@@ -1,5 +1,5 @@
 import { createId } from "@paralleldrive/cuid2";
-import { integer, sqliteTable, text, unique, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { integer, real, sqliteTable, text, unique, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 const id = text().primaryKey().$defaultFn(createId);
 const createdAt = integer({ mode: "timestamp" })
@@ -83,8 +83,29 @@ export const bookingTable = sqliteTable("booking", {
   updatedAt
 });
 
+export const locationTable = sqliteTable("location", {
+  id,
+  userId: text()
+    .notNull()
+    .unique()
+    .references(() => userTable.id),
+  name: text().notNull(),
+  address: text().notNull(),
+  placeId: integer(),
+  city: text().notNull(),
+  state: text().notNull(),
+  country: text().notNull(),
+  postalCode: text().notNull(),
+  boundingBox: text({ mode: "json" }).notNull(),
+  lat: real().notNull(),
+  lng: real().notNull(),
+  createdAt,
+  updatedAt
+});
+
 export type Session = typeof sessionTable.$inferSelect;
 export type User = typeof userTable.$inferSelect;
 export type Availability = typeof availabilityTable.$inferSelect;
 export type Event = typeof eventsTable.$inferSelect;
 export type Booking = typeof bookingTable.$inferSelect;
+export type Location = typeof locationTable.$inferSelect;

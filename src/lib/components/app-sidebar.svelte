@@ -14,19 +14,24 @@
   const data = {
     main: [
       {
-        name: "Events",
-        url: "/events",
+        name: m.events(),
+        url: localizeHref("/events"),
         icon: Link
       },
       {
-        name: "Bookings",
-        url: "/bookings",
+        name: m.bookings(),
+        url: localizeHref("/bookings"),
         icon: Calendar
       },
       {
-        name: "Availability",
-        url: "/availability",
+        name: m.availability(),
+        url: localizeHref("/availability"),
         icon: CalendarClock
+      },
+      {
+        name: m.location(),
+        url: localizeHref("/location"),
+        icon: Map
       }
       // {
       //   name: "Teams",
@@ -42,6 +47,8 @@
   import NavMain from "$lib/components/nav-main.svelte";
   import NavUser from "$lib/components/nav-user.svelte";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
+  import { m } from "$lib/i18n";
+  import { localizeHref } from "$lib/paraglide/runtime";
   import type { ComponentProps } from "svelte";
 
   type Props = {
