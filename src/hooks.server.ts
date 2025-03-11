@@ -4,15 +4,15 @@ import { redirect, type Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 
 function isAuthRoute(routeId: string | null) {
-  return ["/(app)", "/(auth)/login", "/(auth)/register"].some((route) => routeId?.startsWith(route));
+  return ["/(app)"].some((route) => routeId?.startsWith(route));
 }
 
 const handleAuth: Handle = async ({ event, resolve }) => {
   const token = event.cookies.get(auth.sessionCookieName);
 
-  // if (!token && isAuthRoute(event.route.id)) {
-  //   return redirect(302, localizeUrl("/login"));
-  // }
+  if (!token && isAuthRoute(event.route.id)) {
+    return redirect(302, localizeUrl("/login"));
+  }
 
   if (!token) {
     event.locals.user = null;

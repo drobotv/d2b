@@ -5,6 +5,7 @@
   import { Button } from "$lib/components/ui/button";
   import * as Card from "$lib/components/ui/card";
   import * as Form from "$lib/components/ui/form";
+  import { m } from "$lib/i18n";
   import { bookingSchema } from "$lib/schemas/booking";
   import { adapter, superForm } from "$lib/utils/superform";
   import type { TimeSlot } from "$lib/utils/timeSlots";
@@ -197,20 +198,21 @@
   // Format functions
   function formatDuration(minutes: number): string {
     if (minutes < 60) {
-      return `${minutes} min`;
+      return `${minutes} ${m.minutes()}`;
     }
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return remainingMinutes > 0 ? `${hours} hr ${remainingMinutes} min` : `${hours} hr`;
+    return remainingMinutes > 0 ? `${hours} hr ${remainingMinutes} ${m.minutes()}` : `${hours} hr`;
   }
 
   function formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    // Using Intl.DateTimeFormat for proper internationalization
+    return new Intl.DateTimeFormat(navigator.language, {
       weekday: "long",
       month: "long",
       day: "numeric"
-    });
+    }).format(date);
   }
 
   // Check if a date is in the past
@@ -256,7 +258,7 @@
           <div class="flex h-full flex-col p-6 md:border-r">
             <div class="mb-4">
               <h2 class="text-2xl font-bold">{data.event.title}</h2>
-              <p class="text-muted-foreground">Hosted by {data.username}</p>
+              <p class="text-muted-foreground">{m.hosted_by({ name: data.username })}</p>
             </div>
 
             <div class="flex flex-1 flex-col space-y-4">
@@ -266,7 +268,8 @@
                   <p class="font-medium">{formatDuration(data.event.duration)}</p>
                   {#if data.event.bufferTime > 0}
                     <p class="text-muted-foreground text-sm">
-                      {formatDuration(data.event.bufferTime)} buffer time
+                      {formatDuration(data.event.bufferTime)}
+                      {m.buffer_time()}
                     </p>
                   {/if}
                 </div>
@@ -275,14 +278,14 @@
               <div class="flex items-start gap-3">
                 <Calendar class="text-muted-foreground mt-0.5 h-5 w-5" />
                 <div>
-                  <p class="font-medium">Time zone</p>
+                  <p class="font-medium">{m.time_zone()}</p>
                   <p class="text-muted-foreground text-sm">{data.availability.timeZone.replace(/_/g, " ")}</p>
                 </div>
               </div>
 
               {#if data.event.description}
                 <div class="flex max-h-[250px] flex-col border-t pt-4">
-                  <h3 class="mb-2 text-sm font-medium">About this event</h3>
+                  <h3 class="mb-2 text-sm font-medium">{m.about_this_event()}</h3>
                   <div class="text-muted-foreground h-full overflow-y-auto text-sm whitespace-pre-line">
                     {data.event.description}
                   </div>
@@ -291,8 +294,8 @@
 
               {#if data.event.requiresConfirmation}
                 <div class="bg-muted mt-auto rounded-md p-3 text-sm">
-                  <p class="font-medium">This event requires confirmation</p>
-                  <p class="text-muted-foreground">The host will confirm or decline your booking request.</p>
+                  <p class="font-medium">{m.event_requires_confirmation()}</p>
+                  <p class="text-muted-foreground">{m.host_will_confirm()}</p>
                 </div>
               {/if}
             </div>
@@ -303,7 +306,7 @@
             <div class="flex flex-row items-center justify-between pb-4">
               <div class="text-center">
                 <h3 class="text-xl font-medium">
-                  {currentDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                  {new Intl.DateTimeFormat(navigator.language, { month: "long", year: "numeric" }).format(currentDate)}
                 </h3>
               </div>
               <div class="flex items-center gap-1">
@@ -319,7 +322,7 @@
             <!-- Calendar grid -->
             <div class="grid grid-cols-7 gap-1">
               <!-- Weekday headers -->
-              {#each ["M", "T", "W", "T", "F", "S", "S"] as day}
+              {#each [m.monday_short(), m.tuesday_short(), m.wednesday_short(), m.thursday_short(), m.friday_short(), m.saturday_short(), m.sunday_short()] as day}
                 <div class="py-1 text-center text-sm font-medium">{day}</div>
               {/each}
 
@@ -351,12 +354,16 @@
           <div class="min-h-[450px] border-t p-6 md:border-t-0">
             <div class="mb-4">
               <h3 class="text-lg font-medium">
-                {selectedDate ? formatDate(selectedDate) : "Select a date"}
+                {selectedDate ? formatDate(selectedDate) : m.select_a_date()}
               </h3>
               <p class="text-muted-foreground text-sm">
-                {timeSlotsForSelectedDate.length > 0
-                  ? `${timeSlotsForSelectedDate.length} available time slots`
-                  : "No available time slots"}
+                {#if timeSlotsForSelectedDate.length > 0}
+                  {timeSlotsForSelectedDate.length === 1
+                    ? m.available_time_slot({ count: timeSlotsForSelectedDate.length })
+                    : m.available_time_slots({ count: timeSlotsForSelectedDate.length })}
+                {:else}
+                  {m.no_available_time_slots()}
+                {/if}
               </p>
             </div>
 
@@ -380,12 +387,12 @@
                 </div>
               {:else if selectedDate}
                 <div class="text-muted-foreground py-8 text-center">
-                  <p>No available time slots for this date.</p>
-                  <p class="mt-2 text-sm">Please select another date.</p>
+                  <p>{m.no_time_slots_for_date()}</p>
+                  <p class="mt-2 text-sm">{m.select_another_date()}</p>
                 </div>
               {:else}
                 <div class="text-muted-foreground py-8 text-center">
-                  <p>Please select a date to view available time slots.</p>
+                  <p>{m.select_date_to_view_slots()}</p>
                 </div>
               {/if}
             </div>
@@ -403,11 +410,11 @@
                 {formatTimeSlot(selectedSlot.end, data.availability.timeZone)}
               </p>
             {:else}
-              <p class="text-muted-foreground">Select a date and time to continue</p>
+              <p class="text-muted-foreground">{m.select_date_time_to_continue()}</p>
             {/if}
           </div>
           <Button disabled={!selectedDate || !selectedSlot} onclick={startBooking}>
-            Continue
+            {m.continue_button()}
             <ArrowRight class="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -420,11 +427,13 @@
     <div class="mx-auto w-full max-w-md">
       <Card.Root class="rounded-b-none p-6">
         <Card.Header>
-          <Card.Title>Complete your booking</Card.Title>
+          <Card.Title>{m.complete_your_booking()}</Card.Title>
           <Card.Description>
-            {data.event.title} with {data.username} on {formatDate(selectedDate || "")}
+            {data.event.title}
+            {m.with_username({ name: data.username })}
+            {m.on_date({ date: formatDate(selectedDate || "") })}
             {#if selectedSlot}
-              at {formatTimeSlot(selectedSlot.start, data.availability.timeZone)}
+              {m.at_time({ time: formatTimeSlot(selectedSlot.start, data.availability.timeZone) })}
             {/if}
           </Card.Description>
         </Card.Header>
@@ -439,7 +448,7 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <div class="space-y-2">
-                    <Form.Label>Your Name</Form.Label>
+                    <Form.Label>{m.your_name()}</Form.Label>
                     <input
                       {...props}
                       type="text"
@@ -457,7 +466,7 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <div class="space-y-2">
-                    <Form.Label>Email Address</Form.Label>
+                    <Form.Label>{m.email()}</Form.Label>
                     <input
                       {...props}
                       type="email"
@@ -475,12 +484,12 @@
               <Form.Control>
                 {#snippet children({ props })}
                   <div class="space-y-2">
-                    <Form.Label>Additional Notes</Form.Label>
+                    <Form.Label>{m.notes()}</Form.Label>
                     <textarea
                       {...props}
                       class="border-input bg-background w-full rounded-md border px-3 py-2"
                       rows="3"
-                      placeholder="Any additional information you'd like to share"
+                      placeholder={m.additional_notes_placeholder()}
                       bind:value={$formData.notes}
                     ></textarea>
                   </div>
@@ -491,7 +500,7 @@
 
             <div class="pt-4">
               <Form.Button class="w-full" disabled={$submitting}>
-                {$submitting ? "Confirming..." : "Confirm Booking"}
+                {$submitting ? m.confirming() : m.confirm_booking()}
               </Form.Button>
             </div>
           </form>
@@ -517,7 +526,7 @@
               updateUrl();
             }}
           >
-            Back to calendar
+            {m.back_to_calendar()}
           </Button>
         </div>
       </div>
