@@ -122,108 +122,110 @@
   <title>{m.bookings()} | D2B</title>
 </svelte:head>
 
-<header class="flex items-start justify-between">
-  <div class="space-y-0.5">
-    <h2 class="text-2xl font-bold tracking-tight">{m.bookings()}</h2>
-    <p class="text-muted-foreground">{m.bookings_desc()}</p>
-  </div>
-</header>
-
-<Tabs.Root value={selectedStatus} onValueChange={handleTabChange} class="mt-6">
-  <Tabs.List class=" grid max-w-md grid-cols-5">
-    {#each statusOptions as option}
-      <Tabs.Trigger value={option.value}>{option.label}</Tabs.Trigger>
-    {/each}
-  </Tabs.List>
-</Tabs.Root>
-
-<main class="mt-6">
-  {#if data.bookings.length === 0}
-    <div class="border-muted flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12">
-      <div class="bg-muted mb-6 flex h-20 w-20 items-center justify-center rounded-full">
-        <CalendarIcon class="text-muted-foreground h-10 w-10" />
-      </div>
-      <h3 class="mb-2 text-xl font-semibold">{m.no_bookings()}</h3>
-      <p class="text-muted-foreground mb-8 max-w-md text-center">{m.no_bookings_desc()}</p>
+<div class="container mx-auto px-4">
+  <header class="mb-8">
+    <div class="space-y-0.5">
+      <h2 class="text-2xl font-bold tracking-tight">{m.bookings()}</h2>
+      <p class="text-muted-foreground">{m.bookings_desc()}</p>
     </div>
-  {:else}
-    <div class="space-y-6">
-      {#each groupedBookings as [dayLabel, bookings]}
-        <div class="relative">
-          <div class="bg-background sticky top-0 z-10 mb-2 flex items-center gap-2">
-            <div class="bg-muted text-muted-foreground rounded-md px-3 py-1 text-sm font-medium">
-              {dayLabel}
-            </div>
-            <div class="bg-muted h-px flex-1"></div>
-          </div>
-          <div class="overflow-hidden rounded-md border">
-            <Accordion.Root type="multiple" value={expandedItems} onValueChange={(value) => (expandedItems = value)}>
-              {#each bookings as booking (booking.id)}
-                <Accordion.Item value={booking.id} class="border-b last:border-0">
-                  <div class="p-4">
-                    <div class="flex items-center justify-between">
-                      <div>
-                        <div class="flex items-center gap-2">
-                          <div class="font-medium">{booking.eventName}</div>
-                          <Badge variant={getStatusBadgeVariant(booking.status)}>{booking.status}</Badge>
-                        </div>
-                        <div class="font-medium">{booking.guestName}</div>
-                        <div class="text-muted-foreground text-sm">{booking.guestEmail}</div>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        {#if booking.status === "pending"}
-                          <Button variant="outline" size="sm" onclick={() => openCancelDialog(booking)}>
-                            <XIcon class="mr-2 h-4 w-4" />
-                            {m.cancel()}
-                          </Button>
-                          <Button variant="default" size="sm" onclick={() => confirmBooking(booking)}>
-                            <CheckIcon class="mr-2 h-4 w-4" />
-                            {m.confirm()}
-                          </Button>
-                        {/if}
-                        {#if booking.status === "confirmed"}
-                          <Button variant="outline" size="sm" onclick={() => openCancelDialog(booking)}>
-                            <XIcon class="mr-2 h-4 w-4" />
-                            {m.cancel()}
-                          </Button>
-                        {/if}
-                      </div>
-                    </div>
-                    <div class="mt-2 flex items-center justify-between">
-                      <div class="text-muted-foreground text-sm">
-                        {dayLabel}
-                        {booking.startTime.toLocaleTimeString()} - {booking.endTime.toLocaleTimeString()}
-                      </div>
-                      <Accordion.Trigger class="p-0"></Accordion.Trigger>
-                    </div>
-                  </div>
-                  <Accordion.Content class="bg-muted/30 border-t px-4 py-3">
-                    <div class="grid gap-2 text-sm">
-                      <div class="grid grid-cols-2">
-                        <span class="text-muted-foreground">{m.start_time()}:</span>
-                        <span>{booking.startTime.toLocaleString()}</span>
-                      </div>
-                      <div class="grid grid-cols-2">
-                        <span class="text-muted-foreground">{m.end_time()}:</span>
-                        <span>{booking.endTime.toLocaleString()}</span>
-                      </div>
-                      {#if booking.notes}
-                        <div class="mt-1">
-                          <span class="text-muted-foreground">{m.notes()}:</span>
-                          <p class="mt-1">{booking.notes}</p>
-                        </div>
-                      {/if}
-                    </div>
-                  </Accordion.Content>
-                </Accordion.Item>
-              {/each}
-            </Accordion.Root>
-          </div>
-        </div>
+  </header>
+
+  <Tabs.Root value={selectedStatus} onValueChange={handleTabChange} class="mt-6">
+    <Tabs.List class=" grid max-w-md grid-cols-5">
+      {#each statusOptions as option}
+        <Tabs.Trigger value={option.value}>{option.label}</Tabs.Trigger>
       {/each}
-    </div>
-  {/if}
-</main>
+    </Tabs.List>
+  </Tabs.Root>
+
+  <main class="mt-6">
+    {#if data.bookings.length === 0}
+      <div class="border-muted flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12">
+        <div class="bg-muted mb-6 flex h-20 w-20 items-center justify-center rounded-full">
+          <CalendarIcon class="text-muted-foreground h-10 w-10" />
+        </div>
+        <h3 class="mb-2 text-xl font-semibold">{m.no_bookings()}</h3>
+        <p class="text-muted-foreground mb-8 max-w-md text-center">{m.no_bookings_desc()}</p>
+      </div>
+    {:else}
+      <div class="space-y-6">
+        {#each groupedBookings as [dayLabel, bookings]}
+          <div class="relative">
+            <div class="bg-background sticky top-0 z-10 mb-2 flex items-center gap-2">
+              <div class="bg-muted text-muted-foreground rounded-md px-3 py-1 text-sm font-medium">
+                {dayLabel}
+              </div>
+              <div class="bg-muted h-px flex-1"></div>
+            </div>
+            <div class="overflow-hidden rounded-md border">
+              <Accordion.Root type="multiple" value={expandedItems} onValueChange={(value) => (expandedItems = value)}>
+                {#each bookings as booking (booking.id)}
+                  <Accordion.Item value={booking.id} class="border-b last:border-0">
+                    <div class="p-4">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <div class="flex items-center gap-2">
+                            <div class="font-medium">{booking.eventName}</div>
+                            <Badge variant={getStatusBadgeVariant(booking.status)}>{booking.status}</Badge>
+                          </div>
+                          <div class="font-medium">{booking.guestName}</div>
+                          <div class="text-muted-foreground text-sm">{booking.guestEmail}</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          {#if booking.status === "pending"}
+                            <Button variant="outline" size="sm" onclick={() => openCancelDialog(booking)}>
+                              <XIcon class="mr-2 h-4 w-4" />
+                              {m.cancel()}
+                            </Button>
+                            <Button variant="default" size="sm" onclick={() => confirmBooking(booking)}>
+                              <CheckIcon class="mr-2 h-4 w-4" />
+                              {m.confirm()}
+                            </Button>
+                          {/if}
+                          {#if booking.status === "confirmed"}
+                            <Button variant="outline" size="sm" onclick={() => openCancelDialog(booking)}>
+                              <XIcon class="mr-2 h-4 w-4" />
+                              {m.cancel()}
+                            </Button>
+                          {/if}
+                        </div>
+                      </div>
+                      <div class="mt-2 flex items-center justify-between">
+                        <div class="text-muted-foreground text-sm">
+                          {dayLabel}
+                          {booking.startTime.toLocaleTimeString()} - {booking.endTime.toLocaleTimeString()}
+                        </div>
+                        <Accordion.Trigger class="p-0"></Accordion.Trigger>
+                      </div>
+                    </div>
+                    <Accordion.Content class="bg-muted/30 border-t px-4 py-3">
+                      <div class="grid gap-2 text-sm">
+                        <div class="grid grid-cols-2">
+                          <span class="text-muted-foreground">{m.start_time()}:</span>
+                          <span>{booking.startTime.toLocaleString()}</span>
+                        </div>
+                        <div class="grid grid-cols-2">
+                          <span class="text-muted-foreground">{m.end_time()}:</span>
+                          <span>{booking.endTime.toLocaleString()}</span>
+                        </div>
+                        {#if booking.notes}
+                          <div class="mt-1">
+                            <span class="text-muted-foreground">{m.notes()}:</span>
+                            <p class="mt-1">{booking.notes}</p>
+                          </div>
+                        {/if}
+                      </div>
+                    </Accordion.Content>
+                  </Accordion.Item>
+                {/each}
+              </Accordion.Root>
+            </div>
+          </div>
+        {/each}
+      </div>
+    {/if}
+  </main>
+</div>
 
 <!-- Cancel Booking Dialog -->
 <Dialog.Root bind:open={cancelDialogOpen}>

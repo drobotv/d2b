@@ -17,7 +17,7 @@
   "availability": "Availability",
   "availability_desc": "Configure time when you are available for bookings.",
   "bookings": "Bookings",
-  "bookings_desc": "See upcoming and past event.",
+  "bookings_desc": "See upcoming and past events.",
   "event_types": "Event types",
   "event_types_desc": "Create events people can book on your public page.",
   "new": "New",
@@ -162,5 +162,10 @@
   "back_to_calendar": "Back to calendar",
   "event_not_found": "Event not found",
   "user_availability_not_found": "User availability not found",
-  "booking_creation_failed": "Failed to create booking. Please try again."
+  "booking_creation_failed": "Failed to create booking. Please try again.",
+  "map_location": "Map Location",
+  "map_location_desc": "Click on the map to set your location or drag the marker",
+  "account": "Account",
+  "logout": "Logout",
+  "language": "Language"
 }

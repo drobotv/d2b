@@ -50,51 +50,55 @@
   <title>{m.event_types()} | D2B</title>
 </svelte:head>
 
-<header class="flex items-start justify-between">
-  <div class="space-y-0.5">
-    <h2 class="text-2xl font-bold tracking-tight">{m.event_types()}</h2>
-    <p class="text-muted-foreground">{m.event_types_desc()}</p>
-  </div>
-
-  <Button
-    onclick={() => {
-      isEditing = false;
-      form.reset();
-      showDialog = true;
-    }}
-  >
-    <PlusIcon class="mr-2 h-4 w-4" />
-    <span>{m.new()}</span>
-  </Button>
-</header>
-
-<main class="mt-8">
-  {#if data.events.length === 0}
-    <div class="border-muted flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12">
-      <div class="bg-muted mb-6 flex h-20 w-20 items-center justify-center rounded-full">
-        <CalendarIcon class="text-muted-foreground h-10 w-10" />
+<div class="container mx-auto px-4">
+  <header class="mb-8">
+    <div class="flex items-center justify-between">
+      <div class="space-y-0.5">
+        <h2 class="text-2xl font-bold tracking-tight">{m.event_types()}</h2>
+        <p class="text-muted-foreground">{m.event_types_desc()}</p>
       </div>
-      <h3 class="mb-2 text-xl font-semibold">{m.no_event_types()}</h3>
-      <p class="text-muted-foreground mb-8 max-w-md text-center">{m.create_event_types_desc()}</p>
+
       <Button
-        size="lg"
         onclick={() => {
           isEditing = false;
           form.reset();
           showDialog = true;
         }}
       >
-        <PlusIcon class="mr-2 h-5 w-5" />
-        <span>{m.create_event_type()}</span>
+        <PlusIcon class="mr-2 h-4 w-4" />
+        <span>{m.new()}</span>
       </Button>
     </div>
-  {:else}
-    <div class="overflow-hidden rounded-md border">
-      {#each data.events as event (event.id)}
-        <EventCard {event} onEdit={handleEdit} />
-      {/each}
-    </div>
-  {/if}
-</main>
+  </header>
+
+  <main class="mt-8">
+    {#if data.events.length === 0}
+      <div class="border-muted flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12">
+        <div class="bg-muted mb-6 flex h-20 w-20 items-center justify-center rounded-full">
+          <CalendarIcon class="text-muted-foreground h-10 w-10" />
+        </div>
+        <h3 class="mb-2 text-xl font-semibold">{m.no_event_types()}</h3>
+        <p class="text-muted-foreground mb-8 max-w-md text-center">{m.create_event_types_desc()}</p>
+        <Button
+          size="lg"
+          onclick={() => {
+            isEditing = false;
+            form.reset();
+            showDialog = true;
+          }}
+        >
+          <PlusIcon class="mr-2 h-5 w-5" />
+          <span>{m.create_event_type()}</span>
+        </Button>
+      </div>
+    {:else}
+      <div class="overflow-hidden rounded-md border">
+        {#each data.events as event (event.id)}
+          <EventCard {event} onEdit={handleEdit} />
+        {/each}
+      </div>
+    {/if}
+  </main>
+</div>
 
 <EventDialog {form} {isEditing} open={showDialog} onOpenChange={(open) => (showDialog = open)} />

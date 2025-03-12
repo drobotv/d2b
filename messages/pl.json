@@ -62,8 +62,8 @@
   "time_zone_desc": "Wybierz swoją strefę czasową, aby zapewnić dokładne planowanie",
   "copy_schedule": "Kopiuj harmonogram do innych dni",
   "copy_schedule_desc": "Kopiuj harmonogram do innych dni",
-  "weekly_hours": "Godziny tygodniowe",
-  "weekly_hours_desc": "Skonfiguruj godziny, w których jesteś dostępny na spotkania w każdym dniu tygodnia",
+  "weekly_hours": "Dostępność tygodniowa",
+  "weekly_hours_desc": "Skonfiguruj godziny, w których jesteś dostępny na spotkania.",
   "all": "Wszystkie",
   "pending": "Oczekujące",
   "confirmed": "Potwierdzone",
@@ -162,5 +162,10 @@
   "back_to_calendar": "Powrót do kalendarza",
   "event_not_found": "Nie znaleziono wydarzenia",
   "user_availability_not_found": "Nie znaleziono dostępności użytkownika",
-  "booking_creation_failed": "Nie udało się utworzyć rezerwacji. Spróbuj ponownie."
+  "booking_creation_failed": "Nie udało się utworzyć rezerwacji. Spróbuj ponownie.",
+  "map_location": "Lokalizacja",
+  "map_location_desc": "Kliknij na mapie, aby ustawić swoją lokalizację.",
+  "account": "Konto",
+  "logout": "Wyloguj",
+  "language": "Język"
 }

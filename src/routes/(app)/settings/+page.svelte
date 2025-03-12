@@ -33,26 +33,25 @@
   const { form: passwordData, enhance: enhancePasswordChange, errors: passwordErrors } = passwordChangeForm;
 </script>
 
-<div class="container mx-auto max-w-6xl px-4 py-6">
-  <header class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-    <div class="space-y-1">
-      <h1 class="text-3xl font-bold tracking-tight">{m.settings()}</h1>
+<div class="container mx-auto px-4">
+  <header class="mb-8">
+    <div class="space-y-0.5">
+      <h2 class="text-2xl font-bold tracking-tight">{m.settings()}</h2>
       <p class="text-muted-foreground">{m.settings_desc()}</p>
     </div>
   </header>
 
   <div class="grid grid-cols-1 gap-8 md:grid-cols-12">
-    <!-- Left sidebar with user info -->
     <div class="hidden space-y-4 md:col-span-3 lg:block">
       <div class="bg-card flex flex-col items-center rounded-lg border p-6 shadow-sm">
-        <div class="bg-primary/10 mb-4 flex h-24 w-24 items-center justify-center rounded-full">
-          <span class="text-primary text-2xl font-semibold">
-            {data.user?.firstName?.[0] || ""}{data.user?.lastName?.[0] || ""}
-          </span>
-        </div>
+        <img
+          src={"https://avatars.githubusercontent.com/u/109414395?v=4"}
+          alt="User"
+          class="mb-2 h-24 w-24 rounded-full"
+        />
         <h2 class="text-xl font-semibold">{data.user?.firstName || ""} {data.user?.lastName || ""}</h2>
         <p class="text-muted-foreground text-sm">{data.user?.username || ""}</p>
-        <p class="text-muted-foreground text-sm">{data.user?.email || ""}</p>
+        <p class="text-muted-foreground text-sm">drobotv@example.com</p>
       </div>
     </div>
 
@@ -105,7 +104,6 @@
         </Card.Content>
       </Card.Root>
 
-      <!-- Password Change -->
       <Card.Root>
         <Card.Header>
           <Card.Title>{m.security()}</Card.Title>

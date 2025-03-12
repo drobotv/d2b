@@ -1,7 +1,8 @@
 import { eventSchema } from "$lib/schemas/event";
 
 import { db } from "$lib/server/db";
-import { bookingTable, eventsTable } from "$lib/server/db/schema";
+import { availabilityTable, bookingTable, eventsTable, locationTable } from "$lib/server/db/schema";
+import { emailService } from "$lib/server/email";
 import { adapter } from "$lib/utils/superform";
 import { fail } from "@sveltejs/kit";
 import { and, asc, eq, lte } from "drizzle-orm";
@@ -77,7 +78,64 @@ export const actions = {
       })
       .where(eq(bookingTable.id, bookingId));
 
-    // TODO: Send email notification with message if email integration is set up
+    // Send cancellation email to the guest
+    try {
+      // Get event details
+      const [event] = await db
+        .select({
+          title: eventsTable.title,
+          type: eventsTable.type
+        })
+        .from(eventsTable)
+        .where(eq(eventsTable.id, booking.eventTypeId));
+
+      // Get availability for timezone
+      const [availability] = await db
+        .select({
+          timeZone: availabilityTable.timeZone
+        })
+        .from(availabilityTable)
+        .where(eq(availabilityTable.userId, locals.user!.id));
+
+      // Format date and time for email
+      const bookingDate = new Date(booking.startTime).toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: availability.timeZone
+      });
+
+      const formatTime = (date: Date) => {
+        return date.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: availability.timeZone
+        });
+      };
+
+      const startTimeFormatted = formatTime(new Date(booking.startTime));
+      const endTimeFormatted = formatTime(new Date(booking.endTime));
+
+      // Create rebook URL
+      const rebookUrl = `/${locals.user!.username}/${event.type}`;
+
+      // Send cancellation email
+      await emailService.sendCancellationEmail(booking.guestEmail, {
+        eventTitle: event.title,
+        hostName: `${locals.user!.firstName || ""} ${locals.user!.lastName || ""}`.trim() || locals.user!.username,
+        bookingDate,
+        startTime: startTimeFormatted,
+        endTime: endTimeFormatted,
+        timeZone: availability.timeZone,
+        guestName: booking.guestName,
+        cancellationMessage: message,
+        rebookUrl
+      });
+    } catch (err) {
+      console.error("Error sending cancellation email:", err);
+      // Continue with the cancellation even if email fails
+    }
 
     return { success: true };
   },
@@ -115,7 +173,71 @@ export const actions = {
       })
       .where(eq(bookingTable.id, bookingId));
 
-    // TODO: Send confirmation email if email integration is set up
+    // Send confirmation email to the guest
+    try {
+      // Get event details
+      const [event] = await db
+        .select({
+          title: eventsTable.title
+        })
+        .from(eventsTable)
+        .where(eq(eventsTable.id, booking.eventTypeId));
+
+      // Get location information
+      const [location] = await db
+        .select({
+          name: locationTable.name,
+          address: locationTable.address
+        })
+        .from(locationTable)
+        .where(eq(locationTable.userId, locals.user!.id));
+
+      // Get availability for timezone
+      const [availability] = await db
+        .select({
+          timeZone: availabilityTable.timeZone
+        })
+        .from(availabilityTable)
+        .where(eq(availabilityTable.userId, locals.user!.id));
+
+      // Format date and time for email
+      const bookingDate = new Date(booking.startTime).toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: availability.timeZone
+      });
+
+      const formatTime = (date: Date) => {
+        return date.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: availability.timeZone
+        });
+      };
+
+      const startTimeFormatted = formatTime(new Date(booking.startTime));
+      const endTimeFormatted = formatTime(new Date(booking.endTime));
+
+      // Send confirmation email
+      await emailService.sendConfirmationEmail(booking.guestEmail, {
+        eventTitle: event.title,
+        hostName: `${locals.user!.firstName || ""} ${locals.user!.lastName || ""}`.trim() || locals.user!.username,
+        bookingDate,
+        startTime: startTimeFormatted,
+        endTime: endTimeFormatted,
+        timeZone: availability.timeZone,
+        guestName: booking.guestName,
+        location: {
+          name: location.name,
+          address: location.address
+        }
+      });
+    } catch (err) {
+      console.error("Error sending confirmation email:", err);
+      // Continue with the confirmation even if email fails
+    }
 
     return { success: true };
   }
